@@ -191,23 +191,30 @@ if df is not None:
 
         with col_s1:
             st.markdown("**Distribución de Seguridad**")
-
-            df["num_seguridad"] = pd.to_numeric(df["num_seguridad"], errors="coerce")
-            df_sec_filtered = df[df["num_seguridad"] != 3]
-
-            sec_counts = df_sec_filtered["num_seguridad"].value_counts().reset_index()
-            sec_counts.columns = ["Nivel", "Frecuencia"]
-            sec_counts = sec_counts.sort_values("Nivel")
+            
+            df['num_seguridad'] = pd.to_numeric(df['num_seguridad'], errors='coerce')
+            df_sec_filtered = df[df['num_seguridad'] != 3]
+            
+            sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
+            sec_counts.columns = ['Nivel', 'Frecuencia']
+            sec_counts = sec_counts.sort_values('Nivel')
 
             fig_sec = px.bar(
                 sec_counts,
                 x="Nivel",
                 y="Frecuencia",
-                title="Percepción de seguridad",
-                color_discrete_sequence=["#2E8B57"],
+                text="Frecuencia", # Mostrar número
+                title="Percepción (Excluyendo Neutrales)",
+                color_discrete_sequence=["#2E8B57"], 
                 template=template_style,
             )
-            fig_sec.update_xaxes(type="category")
+            
+            # AJUSTE DE NÚMEROS:
+            max_val_sec = sec_counts["Frecuencia"].max()
+            fig_sec.update_yaxes(range=[0, max_val_sec * 1.2])
+            fig_sec.update_xaxes(type='category') 
+            fig_sec.update_traces(textposition='outside', textfont_size=14)
+            
             st.plotly_chart(fig_sec, use_container_width=True)
 
         with col_s2:
