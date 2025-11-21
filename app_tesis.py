@@ -227,7 +227,6 @@ if df is not None:
         with col_s3:
             st.markdown("**Incidentes Reportados**")
             if "exp_negativa" in df.columns:
-            
                 df['tipo_incidente'] = df['exp_negativa'].astype(str).apply(
                     lambda x: 'No' if x.strip().lower().startswith('no') else 'Sí'
                 )
@@ -237,21 +236,18 @@ if df is not None:
                 
                 fig_exp = px.bar(
                     df_exp,
-                    x="¿Tuvo Incidente?", 
+                    x="¿Tuvo Incidente?",
                     y="Conteo",
-                    text="Conteo", 
+                    text="Conteo",
                     title="¿Ha tenido experiencias negativas?",
                     color="¿Tuvo Incidente?",
-                    
-                  
-                    color_discrete_map={
-                        'Sí': '#C0392B', 
-                        'No': '#27AE60'
-                    }
+                    color_discrete_map={'Sí': '#C0392B', 'No': '#27AE60'}
                 )
                 
-                fig_exp.update_traces(textposition='outside')
-                fig_exp.update_layout(showlegend=False) 
+                max_val_exp = df_exp["Conteo"].max()
+                fig_exp.update_yaxes(range=[0, max_val_exp * 1.25]) 
+                fig_exp.update_traces(textposition='outside', textfont_size=15) 
+                fig_exp.update_layout(showlegend=False)
                 
                 st.plotly_chart(fig_exp, use_container_width=True)
 
