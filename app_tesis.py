@@ -311,7 +311,7 @@ if df is not None:
                     
                     title="¿Ha tenido experiencias negativas?",
                     color="¿Tuvo Incidente?",
-                    color_discrete_map={'Sí': '#C0392B', 'No': '#27AE60'}
+                    color_discrete_map={'Sí': '#66B083', 'No': '#27AE60'}
                 )
                 
                 max_val_exp = df_exp["Conteo"].max()
