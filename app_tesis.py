@@ -120,7 +120,7 @@ if df is not None:
         st.subheader("1. Caracterización Demográfica")
         col_d1, col_d2 = st.columns(2)
 
-    with col_d1:
+        with col_d1:
             df_edad = df["d_edad"].value_counts().reset_index()
             df_edad.columns = ["Rango de Edad", "Frecuencia"]
             
