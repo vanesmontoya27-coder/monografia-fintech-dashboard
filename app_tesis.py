@@ -274,11 +274,16 @@ if df is not None:
                     names="Opinión",
                     values="Conteo",
                     title="Protección de datos: Comparativa",
-                    
+                    # El color lila que pediste (#7A70C2) + grises complementarios
                     color_discrete_sequence=["#7A70C2", "#5D6D7E", "#BDC3C7"],
                 )
                 
-                fig_comp.update_traces(textposition='inside', textinfo='percent+label', textfont_size=14)
+                # CAMBIO CLAVE: 'percent' en lugar de 'percent+label'
+                fig_comp.update_traces(
+                    textposition='inside', 
+                    textinfo='percent', # Solo muestra el % adentro
+                    textfont_size=14
+                )
                 
                 st.plotly_chart(fig_comp, use_container_width=True)
                 
