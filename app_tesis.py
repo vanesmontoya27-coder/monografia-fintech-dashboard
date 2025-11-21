@@ -213,41 +213,31 @@ if df is not None:
         with col_s1:
             st.markdown("**Distribución de Seguridad**")
             
-            # 1. LIMPIEZA Y FILTRADO SEGURO
-            # Convertimos a numérico, forzando errores a NaN
+       
             df['num_seguridad'] = pd.to_numeric(df['num_seguridad'], errors='coerce')
             
-            # Filtrar nulos y eliminar el valor 3 (Neutral)
-            # Usamos .copy() para evitar advertencias de pandas
+        
             df_sec_filtered = df[df['num_seguridad'].notna() & (df['num_seguridad'] != 3)].copy()
             
             if not df_sec_filtered.empty:
-                # Aseguramos que sean enteros para que el mapeo funcione (1.0 -> 1)
                 df_sec_filtered['num_seguridad'] = df_sec_filtered['num_seguridad'].astype(int)
                 
-                # 2. CONTEO
-                # name='Frecuencia' asegura el nombre de la columna en pandas nuevos
                 sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
-                sec_counts.columns = ['Nivel', 'Frecuencia'] # Renombrado explícito
+                sec_counts.columns = ['Nivel', 'Frecuencia'] 
                 
-                # 3. MAPEO DE NOMBRES
                 etiquetas_map = {
                     1: "Muy Bajo",
                     2: "Bajo",
                     4: "Alto",
                     5: "Muy Alto"
                 }
-                # .fillna() evita errores si aparece un número raro
                 sec_counts['Nombre'] = sec_counts['Nivel'].map(etiquetas_map).fillna("Otro")
                 
-                # 4. CÁLCULO DE PORCENTAJE
                 total_filtrado = sec_counts["Frecuencia"].sum()
                 sec_counts["Porcentaje"] = (sec_counts["Frecuencia"] / total_filtrado * 100).round(1).astype(str) + '%'
                 
-                # 5. ORDENAMIENTO
                 sec_counts = sec_counts.sort_values('Nivel')
 
-                # 6. GRAFICAR
                 fig_sec = px.bar(
                     sec_counts,
                     x="Nombre",
@@ -258,11 +248,9 @@ if df is not None:
                     template=template_style,
                 )
                 
-                # 7. AJUSTES VISUALES
                 max_val_sec = sec_counts["Frecuencia"].max()
                 fig_sec.update_yaxes(range=[0, max_val_sec * 1.25])
                 
-                # Forzar orden lógico
                 fig_sec.update_xaxes(
                     type='category', 
                     categoryorder='array', 
@@ -280,13 +268,18 @@ if df is not None:
             if "comp_banca" in df.columns:
                 df_comp = df["comp_banca"].value_counts().reset_index()
                 df_comp.columns = ["Opinión", "Conteo"]
+                
                 fig_comp = px.pie(
                     df_comp,
                     names="Opinión",
                     values="Conteo",
                     title="Protección de datos: Comparativa",
-                    color_discrete_sequence=px.colors.qualitative.Safe,
+                    
+                    color_discrete_sequence=["#7A70C2", "#5D6D7E", "#BDC3C7"],
                 )
+                
+                fig_comp.update_traces(textposition='inside', textinfo='percent+label', textfont_size=14)
+                
                 st.plotly_chart(fig_comp, use_container_width=True)
                 
         with col_s3:
