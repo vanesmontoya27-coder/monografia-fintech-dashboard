@@ -223,37 +223,37 @@ if df is not None:
                     color_discrete_sequence=px.colors.qualitative.Safe,
                 )
                 st.plotly_chart(fig_comp, use_container_width=True)
-
+                
         with col_s3:
             st.markdown("**Incidentes Reportados**")
             if "exp_negativa" in df.columns:
-                # 1. TRANSFORMACIÓN DE DATOS (Lógica Binaria)
-                # Creamos una columna temporal. Si la respuesta empieza con "No", es No.
-                # Todo lo demás (fraudes, caídas, etc.) cuenta como "Sí".
+            
                 df['tipo_incidente'] = df['exp_negativa'].astype(str).apply(
                     lambda x: 'No' if x.strip().lower().startswith('no') else 'Sí'
                 )
                 
-                # 2. CONTAR
                 df_exp = df['tipo_incidente'].value_counts().reset_index()
                 df_exp.columns = ["¿Tuvo Incidente?", "Conteo"]
                 
-                # 3. GRAFICAR
                 fig_exp = px.bar(
                     df_exp,
-                    x="¿Tuvo Incidente?", # Ahora aquí saldrá "Sí" o "No"
+                    x="¿Tuvo Incidente?", 
                     y="Conteo",
-                    text="Conteo", # Ponemos el número encima de la barra
+                    text="Conteo", 
                     title="¿Ha tenido experiencias negativas?",
                     color="¿Tuvo Incidente?",
                     
-                    # 4. COLORES SEMÁNTICOS (Distintivos y Profesionales)
-                    # Rojo Ladrillo para "Sí" (Alerta), Verde Bosque para "No" (Seguro)
+                  
                     color_discrete_map={
                         'Sí': '#C0392B', 
                         'No': '#27AE60'
                     }
                 )
+                
+                fig_exp.update_traces(textposition='outside')
+                fig_exp.update_layout(showlegend=False) 
+                
+                st.plotly_chart(fig_exp, use_container_width=True)
 
         st.markdown("---")
         st.markdown("**Factores Determinantes de Confianza**")
