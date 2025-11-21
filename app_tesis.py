@@ -244,7 +244,7 @@ if df is not None:
                     y="Frecuencia",
                     text="Porcentaje", 
                     title="Percepción de Seguridad",
-                    color_discrete_sequence=["#2E8B57"], 
+                    color_discrete_sequence=["#7F55A1"], 
                     template=template_style,
                 )
                 
