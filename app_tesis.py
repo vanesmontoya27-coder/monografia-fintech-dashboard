@@ -264,27 +264,29 @@ if df is not None:
                 st.warning("No hay datos suficientes para mostrar la distribución de seguridad.")
 
         with col_s2:
+
             st.markdown("**Fintech vs. Banca Tradicional**")
+
             if "comp_banca" in df.columns:
+
                 df_comp = df["comp_banca"].value_counts().reset_index()
+
                 df_comp.columns = ["Opinión", "Conteo"]
-                
+
                 fig_comp = px.pie(
+
                     df_comp,
+
                     names="Opinión",
+
                     values="Conteo",
+
                     title="Protección de datos: Comparativa",
-                    # El color lila que pediste (#7A70C2) + grises complementarios
-                    color_discrete_sequence=["#7A70C2", "#5D6D7E", "#BDC3C7"],
+
+                    color_discrete_sequence=px.colors.qualitative.Safe,
+
                 )
-                
-                # CAMBIO CLAVE: 'percent' en lugar de 'percent+label'
-                fig_comp.update_traces(
-                    textposition='inside', 
-                    textinfo='percent', # Solo muestra el % adentro
-                    textfont_size=14
-                )
-                
+
                 st.plotly_chart(fig_comp, use_container_width=True)
                 
         with col_s3:
