@@ -547,7 +547,7 @@ if df is not None:
                 
                 st.markdown("### 2.2 Impacto")
 
-                st.markdown(f"""
+                html_explanation=f"""
                 <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; border-left: 6px solid #2ecc71;">
                     <h4 style="margin-top:0; color: #2c3e50;">Análisis de Potencia: Educación vs. Seguridad</h4>
                     
@@ -585,7 +585,8 @@ if df is not None:
                         La estrategia ganadora no es solo decir "somos seguros", sino enseñar "cómo se usa".
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """
+                st.markdown(html_explanation, unsafe_allow_html=True)
                 
             except Exception as e:
                 st.warning(f"No se pudo generar la interpretación automática: {e}")
