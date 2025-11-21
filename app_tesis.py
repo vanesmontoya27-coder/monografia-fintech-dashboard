@@ -324,20 +324,34 @@ if df is not None:
         st.markdown("---")
         st.markdown("**Factores Determinantes de Confianza**")
         factor_cols = [c for c in df.columns if c.startswith("factor_")]
+        
         factor_counts = df[factor_cols].sum().sort_values(ascending=True)
         factor_counts.index = factor_counts.index.str.replace("factor_", "")
+
+    
+        total_encuestados = len(df)
+        pct_text = (factor_counts / total_encuestados * 100).round(1).astype(str) + '%'
 
         fig_factors = px.bar(
             x=factor_counts.values,
             y=factor_counts.index,
             orientation="h",
-            color=factor_counts.index,
-            color_discrete_sequence=px.colors.qualitative.Antique,
+            
+            text=pct_text,
+            
+            color_discrete_sequence=["#B05353"],
+            
             title="Desglose de Factores de Confianza",
             template=template_style,
         )
 
+ 
+        fig_factors.update_traces(textposition='inside', textfont_size=14, textfont_color='white')
+        
         fig_factors.update_layout(showlegend=False)
+        
+        max_val = factor_counts.max()
+        fig_factors.update_xaxes(range=[0, max_val * 1.1])
 
         st.plotly_chart(fig_factors, use_container_width=True)
 
