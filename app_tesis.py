@@ -120,20 +120,30 @@ if df is not None:
         st.subheader("1. Caracterización Demográfica")
         col_d1, col_d2 = st.columns(2)
 
-        with col_d1:
+    with col_d1:
             df_edad = df["d_edad"].value_counts().reset_index()
             df_edad.columns = ["Rango de Edad", "Frecuencia"]
+            
+            
+            total_n = df_edad["Frecuencia"].sum()
+            df_edad["Porcentaje"] = (df_edad["Frecuencia"] / total_n * 100).round(1).astype(str) + '%'
 
             fig_edad = px.bar(
                 df_edad,
                 x="Rango de Edad",
                 y="Frecuencia",
+                text="Porcentaje", 
                 title="Distribución por Rango de Edad",
                 color="Rango de Edad",
                 color_discrete_sequence=px.colors.qualitative.Safe,
                 template=template_style,
             )
+            
+            max_val = df_edad["Frecuencia"].max()
+            fig_edad.update_yaxes(range=[0, max_val * 1.2]) 
+            fig_edad.update_traces(textposition='outside', textfont_size=14)
             fig_edad.update_layout(showlegend=False)
+            
             st.plotly_chart(fig_edad, use_container_width=True)
 
         with col_d2:
@@ -149,8 +159,8 @@ if df is not None:
 
         st.markdown("---")
 
-        st.subheader("2. Penetración de Herramientas Fintech")
-        st.markdown("Comparativa de usuarios activos ('Lo uso actualmente').")
+        st.subheader("2. Uso de Herramientas Fintech")
+        st.markdown("Comparativa de usuarios activos ('Lo uso actualmente') respecto al total de encuestados.")
 
         tools = ["uso_nequi", "uso_daviplata", "uso_addi", "uso_sistecredito"]
         tool_names = ["Nequi", "Daviplata", "Addi", "Sistecrédito"]
@@ -172,16 +182,27 @@ if df is not None:
         )
         df_adoption = df_adoption.sort_values("Usuarios Activos", ascending=False)
 
+  
+        total_personas = len(df)
+        df_adoption["Porcentaje"] = (df_adoption["Usuarios Activos"] / total_personas * 100).round(1).astype(str) + '%'
+
         fig_adopt = px.bar(
             df_adoption,
             x="Herramienta",
             y="Usuarios Activos",
-            text="Usuarios Activos",
+            
+            text="Porcentaje", 
+            
             color="Herramienta",
-            title="Cuota de Mercado en la muestra (Usuarios activos)",
+            title="Cuota de Mercado en la muestra (Penetración)",
             color_discrete_sequence=px.colors.qualitative.Bold,
             template=template_style,
         )
+        
+        max_val = df_adoption["Usuarios Activos"].max()
+        fig_adopt.update_yaxes(range=[0, max_val * 1.25])
+        fig_adopt.update_traces(textposition='outside', textfont_size=14)
+        
         st.plotly_chart(fig_adopt, use_container_width=True)
 
         st.markdown("---")
