@@ -213,50 +213,67 @@ if df is not None:
         with col_s1:
             st.markdown("**Distribución de Seguridad**")
             
+            # 1. LIMPIEZA Y FILTRADO SEGURO
+            # Convertimos a numérico, forzando errores a NaN
             df['num_seguridad'] = pd.to_numeric(df['num_seguridad'], errors='coerce')
-            df_sec_filtered = df[df['num_seguridad'] != 3]
             
-            sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
-            sec_counts.columns = ['Nivel', 'Frecuencia']
+            # Filtrar nulos y eliminar el valor 3 (Neutral)
+            # Usamos .copy() para evitar advertencias de pandas
+            df_sec_filtered = df[df['num_seguridad'].notna() & (df['num_seguridad'] != 3)].copy()
             
-            etiquetas_map = {
-                1: "Muy Bajo",
-                2: "Bajo",
-                4: "Alto",
-                5: "Muy Alto"
-            }
-            sec_counts['Nombre'] = sec_counts['Nivel'].map(etiquetas_map)
-            
-            
-            total_filtrado = sec_counts["Frecuencia"].sum()
-            sec_counts["Porcentaje"] = (sec_counts["Frecuencia"] / total_filtrado * 100).round(1).astype(str) + '%'
-            
-            sec_counts = sec_counts.sort_values('Nivel')
+            if not df_sec_filtered.empty:
+                # Aseguramos que sean enteros para que el mapeo funcione (1.0 -> 1)
+                df_sec_filtered['num_seguridad'] = df_sec_filtered['num_seguridad'].astype(int)
+                
+                # 2. CONTEO
+                # name='Frecuencia' asegura el nombre de la columna en pandas nuevos
+                sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
+                sec_counts.columns = ['Nivel', 'Frecuencia'] # Renombrado explícito
+                
+                # 3. MAPEO DE NOMBRES
+                etiquetas_map = {
+                    1: "Muy Bajo",
+                    2: "Bajo",
+                    4: "Alto",
+                    5: "Muy Alto"
+                }
+                # .fillna() evita errores si aparece un número raro
+                sec_counts['Nombre'] = sec_counts['Nivel'].map(etiquetas_map).fillna("Otro")
+                
+                # 4. CÁLCULO DE PORCENTAJE
+                total_filtrado = sec_counts["Frecuencia"].sum()
+                sec_counts["Porcentaje"] = (sec_counts["Frecuencia"] / total_filtrado * 100).round(1).astype(str) + '%'
+                
+                # 5. ORDENAMIENTO
+                sec_counts = sec_counts.sort_values('Nivel')
 
-            fig_sec = px.bar(
-                sec_counts,
-                x="Nombre",
-                y="Personas",
+                # 6. GRAFICAR
+                fig_sec = px.bar(
+                    sec_counts,
+                    x="Nombre",
+                    y="Frecuencia",
+                    text="Porcentaje", 
+                    title="Percepción de Seguridad",
+                    color_discrete_sequence=["#2E8B57"], 
+                    template=template_style,
+                )
                 
-                text="Porcentaje", 
+                # 7. AJUSTES VISUALES
+                max_val_sec = sec_counts["Frecuencia"].max()
+                fig_sec.update_yaxes(range=[0, max_val_sec * 1.25])
                 
-                title="Percepción de Seguridad",
-                color_discrete_sequence=["#2E8B57"], 
-                template=template_style,
-            )
-            
-            max_val_sec = sec_counts["Frecuencia"].max()
-            fig_sec.update_yaxes(range=[0, max_val_sec * 1.2])
-            
-            fig_sec.update_xaxes(
-                type='category', 
-                categoryorder='array', 
-                categoryarray=["Muy Bajo", "Bajo", "Alto", "Muy Alto"]
-            )
-            
-            fig_sec.update_traces(textposition='outside', textfont_size=14)
-            
-            st.plotly_chart(fig_sec, use_container_width=True)
+                # Forzar orden lógico
+                fig_sec.update_xaxes(
+                    type='category', 
+                    categoryorder='array', 
+                    categoryarray=["Muy Bajo", "Bajo", "Alto", "Muy Alto"]
+                )
+                
+                fig_sec.update_traces(textposition='outside', textfont_size=14)
+                
+                st.plotly_chart(fig_sec, use_container_width=True)
+            else:
+                st.warning("No hay datos suficientes para mostrar la distribución de seguridad.")
 
         with col_s2:
             st.markdown("**Fintech vs. Banca Tradicional**")
