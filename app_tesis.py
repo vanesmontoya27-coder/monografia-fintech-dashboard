@@ -197,22 +197,38 @@ if df is not None:
             
             sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
             sec_counts.columns = ['Nivel', 'Frecuencia']
+            
+
+            etiquetas_map = {
+                1: "Muy Bajo",
+                2: "Bajo",
+                4: "Alto",
+                5: "Muy Alto"
+            }
+            sec_counts['Nombre'] = sec_counts['Nivel'].map(etiquetas_map)
+            
+  
             sec_counts = sec_counts.sort_values('Nivel')
 
             fig_sec = px.bar(
                 sec_counts,
-                x="Nivel",
+                x="Nombre", 
                 y="Frecuencia",
-                text="Frecuencia", # Mostrar número
+                text="Frecuencia", 
                 title="Percepción de Seguridad",
                 color_discrete_sequence=["#2E8B57"], 
                 template=template_style,
             )
             
-            # AJUSTE DE NÚMEROS:
             max_val_sec = sec_counts["Frecuencia"].max()
             fig_sec.update_yaxes(range=[0, max_val_sec * 1.2])
-            fig_sec.update_xaxes(type='category') 
+            
+            fig_sec.update_xaxes(
+                type='category', 
+                categoryorder='array', 
+                categoryarray=["Muy Bajo", "Bajo", "Alto", "Muy Alto"]
+            )
+            
             fig_sec.update_traces(textposition='outside', textfont_size=14)
             
             st.plotly_chart(fig_sec, use_container_width=True)
