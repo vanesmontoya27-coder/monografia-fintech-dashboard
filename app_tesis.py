@@ -543,19 +543,52 @@ if df is not None:
 
             try:
                 coef_seg = model.params["num_seguridad"]
+                coef_edu = model.params["num_educacion"]
+                
+                st.markdown("### 3. Traducción a Impacto Real (Explicación Detallada)")
 
-                st.markdown(
-                    f"""
-                <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px;">
-                    <strong>Conclusión para el Lector:</strong><br>
-                    Por cada punto que usted logre aumentar la <b>Seguridad Percibida</b> en sus usuarios, 
-                    la probabilidad de que usen su servicio aumentará en <b>{coef_seg:.2f} puntos</b>.
-                    Es decir, invertir en seguridad tiene un retorno directo en la adopción.
+                st.markdown(f"""
+                <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; border-left: 6px solid #2ecc71;">
+                    <h4 style="margin-top:0; color: #2c3e50;">Análisis de Potencia: Educación vs. Seguridad</h4>
+                    
+                    <p>Para entender la fuerza de estos resultados, imaginemos que la decisión del usuario es subir una <strong>escalera corta de 4 peldaños</strong>:</p>
+                    <ul style="margin-bottom: 15px; background-color: #fff; padding: 10px; border-radius: 5px;">
+                        <li>1<strong>Muy Bajo</strong> (Usuario desconectado)</li>
+                        <li>2<strong>Bajo</strong></li>
+                        <li>3<strong>Alto</strong></li>
+                        <li>4<strong>Muy Alto</strong> (Usuario convencido)</li>
+                    </ul>
+                    
+                    <p>El modelo matemático ha encontrado dos velocidades distintas de ascenso:</p>
+                    
+                    <hr style="border-top: 1px solid #bbb;">
+                    
+                    <h5 style="color: #d35400;">1. El Motor Principal: Educación Financiera ({coef_edu:.2f})</h5>
+                    <p>Este es el hallazgo más importante. El coeficiente es <strong>mayor a 1</strong> (1.09). Esto genera un Efecto Trampolín:</p>
+                    <ul>
+                        <li>Si usted educa al usuario para que suba <strong>1 solo peldaño</strong> en su conocimiento (ej. pasar de nivel "Bajo" a "Alto")...</li>
+                        <li>Su intención de uso salta automáticamente <strong>1.09 peldaños</strong>.</li>
+                        <li><strong>Interpretación:</strong> El conocimiento empodera. Quien entiende cómo funciona la herramienta, la usa casi de inmediato</li>
+                    </ul>
+
+                    <h5 style="color: #2980b9;">2. El Factor de Apoyo: Seguridad Percibida ({coef_seg:.2f})</h5>
+                    <p>Aquí el coeficiente es <strong>0.35</strong>. Es positivo, pero más lento:</p>
+                    <ul>
+                        <li>Si el usuario mejora su sensación de seguridad en <strong>1 peldaño</strong>...</li>
+                        <li>Su intención de uso avanza <strong>0.35 peldaños</strong></li>
+                        <li><strong>Interpretación:</strong> La seguridad es necesaria, pero no suficiente por sí sola. Sentirse seguro ayuda, pero no provoca la adopción inmediata si no hay entendimiento.</li>
+                    </ul>
+                    
+                    <div style="background-color: #e8f6f3; padding: 10px; border-radius: 5px; margin-top: 15px;">
+                        <strong>Conclusión:</strong><br>
+                        Invertir en seguridad suma puntos de a poco, pero <strong>invertir en educación financiera multiplica los resultados</strong>. 
+                        La estrategia ganadora no es solo decir "somos seguros", sino enseñar "cómo se usa".
+                    </div>
                 </div>
-                """,
-                    unsafe_allow_html=True,
-                )
-            except:
+                """, unsafe_allow_html=True)
+                
+            except Exception as e:
+                st.warning(f"No se pudo generar la interpretación automática: {e}")
                 pass
 
             st.markdown("---")
