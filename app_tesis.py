@@ -399,11 +399,11 @@ if df is not None:
             
             if p_k > 0.05:
                 st.info(
-                    "💡 **Interpretación:** El Valor P es mayor a 0.05. Esto indica que **NO hay diferencias significativas**. Hombres y mujeres perciben el riesgo de manera similar."
+                    "**Interpretación:** El Valor P es mayor a 0.05. Esto indica que **NO hay diferencias significativas**. Hombres y mujeres perciben el riesgo de manera similar."
                 )
             else:
                 st.success(
-                    "💡 **Interpretación:** El Valor P es menor a 0.05. **SÍ existen diferencias significativas** en la percepción de seguridad entre géneros."
+                    "**Interpretación:** El Valor P es menor a 0.05. **SÍ existen diferencias significativas** en la percepción de seguridad entre géneros."
                 )
 
 
