@@ -396,18 +396,19 @@ if df is not None:
         if len(groups) > 1:
             stat_k, p_k = kruskal(*groups)
             st.write(f"**Estadístico H:** {stat_k:.4f}, **Valor P:** {p_k:.4f}")
+            
             if p_k > 0.05:
-                st.write(
-                    "Resultados: **No hay diferencias significativas** en la percepción de seguridad basadas en el género. El miedo o confianza es transversal."
+                st.info(
+                    "💡 **Interpretación:** El Valor P es mayor a 0.05. Esto indica que **NO hay diferencias significativas**. Hombres y mujeres perciben el riesgo de manera similar."
                 )
             else:
-                st.write(
-                    "Resultados: **Existen diferencias significativas** entre géneros."
+                st.success(
+                    "💡 **Interpretación:** El Valor P es menor a 0.05. **SÍ existen diferencias significativas** en la percepción de seguridad entre géneros."
                 )
 
-           
+
             df['num_seguridad'] = pd.to_numeric(df['num_seguridad'], errors='coerce')
-            df_box_filtered = df[df['num_seguridad'] != 3].copy()
+            df_box_filtered = df[df['num_seguridad'].notna() & (df['num_seguridad'] != 3)].copy()
 
             fig_box = px.box(
                 df_box_filtered, 
@@ -416,10 +417,13 @@ if df is not None:
                 color="d_genero",
                 template=template_style,
                 title="Distribución de Seguridad por Género",
-                color_discrete_sequence=px.colors.qualitative.Prism, 
+                
+ 
+                color_discrete_sequence=["#7F55A1", "#B05353", "#5D6D7E"], 
             )
             
             fig_box.update_yaxes(
+                title="Nivel de Seguridad Percibido",
                 tickmode='array',
                 tickvals=[1, 2, 4, 5],
                 ticktext=["Muy Bajo", "Bajo", "Alto", "Muy Alto"] 
