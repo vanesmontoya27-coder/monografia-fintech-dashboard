@@ -405,14 +405,26 @@ if df is not None:
                     "Resultados: **Existen diferencias significativas** entre géneros."
                 )
 
+           
+            df['num_seguridad'] = pd.to_numeric(df['num_seguridad'], errors='coerce')
+            df_box_filtered = df[df['num_seguridad'] != 3].copy()
+
             fig_box = px.box(
-                df,
+                df_box_filtered, 
                 x="d_genero",
                 y="num_seguridad",
                 color="d_genero",
                 template=template_style,
                 title="Distribución de Seguridad por Género",
+                color_discrete_sequence=px.colors.qualitative.Prism, 
             )
+            
+            fig_box.update_yaxes(
+                tickmode='array',
+                tickvals=[1, 2, 4, 5],
+                ticktext=["Muy Bajo", "Bajo", "Alto", "Muy Alto"] 
+            )
+            
             st.plotly_chart(fig_box, use_container_width=True)
 
     with tab3:
