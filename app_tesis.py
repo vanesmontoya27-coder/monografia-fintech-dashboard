@@ -204,7 +204,7 @@ if df is not None:
                 x="Nivel",
                 y="Frecuencia",
                 text="Frecuencia", # Mostrar número
-                title="Percepción (Excluyendo Neutrales)",
+                title="Percepción de Seguridad",
                 color_discrete_sequence=["#2E8B57"], 
                 template=template_style,
             )
