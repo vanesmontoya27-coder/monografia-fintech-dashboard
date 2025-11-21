@@ -236,7 +236,7 @@ if df is not None:
             fig_sec = px.bar(
                 sec_counts,
                 x="Nombre",
-                y="Frecuencia",
+                y="Personas",
                 
                 text="Porcentaje", 
                 
@@ -282,11 +282,16 @@ if df is not None:
                 df_exp = df['tipo_incidente'].value_counts().reset_index()
                 df_exp.columns = ["¿Tuvo Incidente?", "Conteo"]
                 
+                total_incidentes = df_exp["Conteo"].sum()
+                df_exp["Porcentaje"] = (df_exp["Conteo"] / total_incidentes * 100).round(1).astype(str) + '%'
+                
                 fig_exp = px.bar(
                     df_exp,
                     x="¿Tuvo Incidente?",
                     y="Conteo",
-                    text="Conteo",
+                    
+                    text="Porcentaje",
+                    
                     title="¿Ha tenido experiencias negativas?",
                     color="¿Tuvo Incidente?",
                     color_discrete_map={'Sí': '#C0392B', 'No': '#27AE60'}
