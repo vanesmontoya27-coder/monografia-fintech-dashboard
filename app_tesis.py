@@ -219,7 +219,7 @@ if df is not None:
                     df_comp,
                     names="Opinión",
                     values="Conteo",
-                    title="Protección de datos:Comparativa",
+                    title="Protección de datos: Comparativa",
                     color_discrete_sequence=px.colors.qualitative.Safe,
                 )
                 st.plotly_chart(fig_comp, use_container_width=True)
