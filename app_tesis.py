@@ -559,7 +559,6 @@ if df is not None:
                 pass
 
             st.markdown("---")
-
             st.subheader("3. ¿Qué hace que la gente se sienta segura?")
             st.markdown(
                 "Analizamos la correlación estadística: ¿Qué palabras clave están más asociadas a decir 'Me siento seguro'?"
@@ -579,6 +578,11 @@ if df is not None:
                 ).reset_index()
 
                 df_corr_factors.columns = ["Factor", "Correlación"]
+
+
+                df_corr_factors = df_corr_factors[
+                    ~df_corr_factors["Factor"].str.contains("fraude", case=False, na=False)
+                ]
 
                 df_corr_factors = df_corr_factors.sort_values(
                     by="Correlación", ascending=True
