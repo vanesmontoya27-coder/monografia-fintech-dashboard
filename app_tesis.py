@@ -484,7 +484,7 @@ if df is not None:
 
             st.markdown("---")
 
-            st.subheader("2. ¿Qué pesa más en la decisión?")
+            st.subheader("2.1 ¿Qué pesa más en la decisión?")
             st.markdown(
                 """
             El siguiente gráfico muestra la **fuerza** de cada variable.
@@ -545,7 +545,7 @@ if df is not None:
                 coef_seg = model.params["num_seguridad"]
                 coef_edu = model.params["num_educacion"]
                 
-                st.markdown("### 3. Traducción a Impacto Real (Explicación Detallada)")
+                st.markdown("### 2.2 Impacto")
 
                 st.markdown(f"""
                 <div style="background-color: #f0f2f6; padding: 20px; border-radius: 10px; border-left: 6px solid #2ecc71;">
