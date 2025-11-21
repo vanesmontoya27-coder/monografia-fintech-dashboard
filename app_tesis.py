@@ -219,7 +219,6 @@ if df is not None:
             sec_counts = df_sec_filtered['num_seguridad'].value_counts().reset_index()
             sec_counts.columns = ['Nivel', 'Frecuencia']
             
-
             etiquetas_map = {
                 1: "Muy Bajo",
                 2: "Bajo",
@@ -228,14 +227,19 @@ if df is not None:
             }
             sec_counts['Nombre'] = sec_counts['Nivel'].map(etiquetas_map)
             
-  
+            
+            total_filtrado = sec_counts["Frecuencia"].sum()
+            sec_counts["Porcentaje"] = (sec_counts["Frecuencia"] / total_filtrado * 100).round(1).astype(str) + '%'
+            
             sec_counts = sec_counts.sort_values('Nivel')
 
             fig_sec = px.bar(
                 sec_counts,
-                x="Nombre", 
+                x="Nombre",
                 y="Frecuencia",
-                text="Frecuencia", 
+                
+                text="Porcentaje", 
+                
                 title="Percepción de Seguridad",
                 color_discrete_sequence=["#2E8B57"], 
                 template=template_style,
