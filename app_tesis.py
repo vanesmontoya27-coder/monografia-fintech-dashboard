@@ -178,7 +178,7 @@ if df is not None:
             y="Usuarios Activos",
             text="Usuarios Activos",
             color="Herramienta",
-            title="Cuota de Mercado",
+            title="Cuota de Mercado en la muestra (Usuarios activos)",
             color_discrete_sequence=px.colors.qualitative.Bold,
             template=template_style,
         )
@@ -190,7 +190,7 @@ if df is not None:
         col_s1, col_s2, col_s3 = st.columns(3)
 
         with col_s1:
-            st.markdown("**Distribución de Seguridad (Sin Neutros)**")
+            st.markdown("**Distribución de Seguridad**")
 
             df["num_seguridad"] = pd.to_numeric(df["num_seguridad"], errors="coerce")
             df_sec_filtered = df[df["num_seguridad"] != 3]
@@ -203,7 +203,7 @@ if df is not None:
                 sec_counts,
                 x="Nivel",
                 y="Frecuencia",
-                title="Percepción (Excluyendo Neutrales)",
+                title="Percepción de seguridad",
                 color_discrete_sequence=["#2E8B57"],
                 template=template_style,
             )
@@ -219,13 +219,13 @@ if df is not None:
                     df_comp,
                     names="Opinión",
                     values="Conteo",
-                    title="Comparativa de Protección",
+                    title="Protección de datos:Comparativa",
                     color_discrete_sequence=px.colors.qualitative.Safe,
                 )
                 st.plotly_chart(fig_comp, use_container_width=True)
 
         with col_s3:
-            st.markdown("**Incidentes Reportados**")
+            st.markdown("**Incidentes Reportados: Experiencia**")
             if "exp_negativa" in df.columns:
                 df_exp = df["exp_negativa"].value_counts().reset_index()
                 df_exp.columns = ["Experiencia Negativa", "Conteo"]
